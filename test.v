@@ -1,21 +1,25 @@
 module test ();
-    reg [2:0] in;
-    wire cout, sout;
-    Adder uut(
-        .cin(in[0]),
-        .a(in[1]),
-        .b(in[2]),
-        .cout(cout),
-        .s(sout)
+    reg clk;
+    reg rst;
+    wire [3:0] out;
+    Accumulator uut(
+        .clk(clk),
+        .rst(rst),
+        .cnt(out)
     );
     initial begin
-        $dumpfile("adder.vcd");
+        $dumpfile("test.vcd");
         $dumpvars(0, uut);
-        in = 3'b0;
+        clk = 0;
+        rst = 1;
+        #1
+        rst = 0;
+        #1
+        rst = 1;
     end
     always #10 begin
-        in = in + 1'b1;
-        if (in == 0)
+        clk = ~clk;
+        if (out == 4'b1111)
             $finish;
     end
 endmodule
